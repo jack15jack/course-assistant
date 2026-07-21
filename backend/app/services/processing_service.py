@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 
 from app.models.job import Job
 from app.models.document import Document
-from ai.ingestion.pdf import extract_pdf_text
+from ai.ingestion.router import extract_document
 
 
 def create_processing_job(
@@ -44,11 +44,7 @@ def process_document(
     db.commit()
 
     try:
-        if document.file_type == "application/pdf":
-            text = extract_pdf_text(document.filepath)
-
-        else:
-            raise Exception("Unsupported file type")
+        text = extract_document(document.filepath, document.file_type)
 
         document.extracted_text = text
         document.status = "processed"

@@ -1,7 +1,17 @@
+# API
 fastapi
 uvicorn
+
+# Database
 sqlalchemy
 psycopg2-binary
 alembic
+
+
 python-dotenv
 pydantic
+
+# Ingestion
+pypdf
+python-pptx
+python-docx
