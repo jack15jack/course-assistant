@@ -4,14 +4,16 @@ from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import Integer
 from sqlalchemy import String
+from sqlalchemy import ForeignKey
+
 from sqlalchemy.orm import relationship
 
 from app.database import Base
 
 
-class Course(Base):
+class Document(Base):
 
-    __tablename__ = "courses"
+    __tablename__ = "documents"
 
     id = Column(
         Integer,
@@ -19,19 +21,30 @@ class Course(Base):
         index=True
     )
 
-    name = Column(
+    course_id = Column(
+        Integer,
+        ForeignKey("courses.id"),
+        nullable=False
+    )
+
+    filename = Column(
         String,
         nullable=False
     )
 
-    semester = Column(
+    filepath = Column(
         String,
         nullable=False
     )
 
-    description = Column(
+    file_type = Column(
         String,
-        nullable=True
+        nullable=False
+    )
+
+    status = Column(
+        String,
+        default="uploaded"
     )
 
     created_at = Column(
@@ -39,9 +52,8 @@ class Course(Base):
         default=datetime.utcnow
     )
 
-    documents = relationship(
-    "Document",
-    back_populates="course",
-    cascade="all, delete"
-    )
 
+    course = relationship(
+        "Course",
+        back_populates="documents"
+    )

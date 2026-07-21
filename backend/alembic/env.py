@@ -1,37 +1,40 @@
 from logging.config import fileConfig
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-from alembic import context
 import os
-from dotenv import load_dotenv
 
+from alembic import context
+from dotenv import load_dotenv
+from sqlalchemy import engine_from_config, pool
+
+# Load environment variables
 load_dotenv()
 
 config = context.config
 
-config.set_main_option(
-    "sqlalchemy.url",
-    os.getenv("DATABASE_URL")
-)
+database_url = os.getenv("DATABASE_URL")
+if database_url is None:
+    raise RuntimeError("DATABASE_URL is not set.")
 
-if config.config_file_name is not None:
-    fileConfig(config.config_file_name)
+config.set_main_option("sqlalchemy.url", database_url)
+
+try:
+    if config.config_file_name is not None:
+        fileConfig(config.config_file_name)
+except KeyError:
+    # alembic.ini doesn't contain logging configuration
+    pass
 
 from app.database import Base
-from app.models import *
+import app.models  # imports all models via app/models/__init__.py
 
 target_metadata = Base.metadata
 
 
 def run_migrations_offline():
-
-    url = config.get_main_option("sqlalchemy.url")
-
     context.configure(
-        url=url,
+        url=database_url,
         target_metadata=target_metadata,
         literal_binds=True,
-        compare_type=True
+        compare_type=True,
     )
 
     with context.begin_transaction():
@@ -39,7 +42,6 @@ def run_migrations_offline():
 
 
 def run_migrations_online():
-
     connectable = engine_from_config(
         config.get_section(config.config_ini_section),
         prefix="sqlalchemy.",
@@ -47,11 +49,10 @@ def run_migrations_online():
     )
 
     with connectable.connect() as connection:
-
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
-            compare_type=True
+            compare_type=True,
         )
 
         with context.begin_transaction():

@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
 from app.routes.courses import router as courses_router
+from app.routes.documents import router as documents_router
 
 
 app = FastAPI(
@@ -8,12 +9,13 @@ app = FastAPI(
     version="0.1.0"
 )
 
+
 app.include_router(courses_router)
+app.include_router(documents_router)
 
 
 @app.get("/")
 def root():
-
     return {
         "message": "Study Assistant API Running"
     }
@@ -21,7 +23,6 @@ def root():
 
 @app.get("/health")
 def health():
-
     return {
         "status": "healthy"
     }
