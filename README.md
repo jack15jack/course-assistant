@@ -30,29 +30,59 @@ Inputs -> Processing Pipeline -> Course Knowledge Base -> Search or AI Generatio
 
 # Roadmap
 
-## Phase 1 - Document Assistant
-Upload PDFs and ask questions
+## Phase 1 — Foundation (Complete)
 
-- PDF upload
-- text extraction
-- chunking
-- embeddings
-- semantic research
-- chat interface
+- Database
+- Courses
+- Documents
+- Uploads
+- Migrations
 
-## Phase 2 - Lecture Audio Processing
-Lecture recording -> speech-to-text -> transcript -> knowledge extraction
+## Phase 2 — Content Management
 
-- automatic lecture notes
-- important concepts
-- definitions
-- equations
+- More document endpoints
+- More course endpoints
+- Update upload storage
+- Update metadata
+- Processing jobs
+- Jobs endpoints
 
-## Phase 3 - Study Material Generator
-Generate flashcards, practice problems, study guide, formula sheet
+## Phase 3 — Ingestion
 
-## Phase 4 - Adaptive Learning
-Track user knowledge and plan learning accordingly
+- PDF extraction
+- PowerPoint extraction
+- DOCX extraction
+- Plain text
+- Images (OCR)
+- Audio (speech-to-text)
+- Video (audio extraction → speech-to-text)
+
+## Phase 4 — Knowledge Base
+
+- Sections
+- Chunking
+- Embeddings
+- Search
+
+## Phase 5 — AI Generation
+
+- Notes
+- Study guides
+- Formula sheets
+- Practice exams
+- Flashcards
+- Concept maps
+- Timeline generation
+
+## Phase 6 — Intelligent Features
+
+- Cross-document linking
+- "Explain this concept"
+- Exam difficulty estimation
+- Weak-topic detection
+- Personalized study plans
+- Automatic review schedules
+
 ---
 
 # Tech Stack
@@ -86,9 +116,9 @@ backend/
 │   ├── database.py             # SQLAlchemy engine/session
 │   │
 │   ├── models/                 # SQLAlchemy models
-│   │   ├── __init__.py
-│   │   ├── course.py
-│   │   ├── document.py
+│   │   ├── __init__.py         
+│   │   ├── course.py           
+│   │   ├── document.py         
 │   │   ├── section.py
 │   │   ├── artifact.py
 │   │   └── job.py
@@ -97,6 +127,7 @@ backend/
 │   │   ├── __init__.py
 │   │   ├── course.py
 │   │   ├── document.py
+│   │   ├── job.py
 │   │   └── artifact.py
 │   │
 │   ├── routes/
@@ -110,7 +141,7 @@ backend/
 │   │   ├── course_service.py
 │   │   ├── document_service.py
 │   │   ├── artifact_service.py
-│   │   └── pipeline_service.py
+│   │   └── processing_service.py
 │   │
 │   └── utils/
 │       └── file_utils.py
@@ -140,12 +171,20 @@ backend/
 │   │   ├── exams.py
 │   │   └── study_guides.py
 │   │
-│   └── pipeline.py
+│   └── pipeline/
+│       ├── __init__.py
+│       ├── document_pipeline.py
+│       ├── artifact_pipeline.py
+│       ├── metadata_pipeline.py
+│       └── pipeline_manager.py
 │
 ├── uploads/
 ├── generated/
 ├── alembic/
-│   └── env.py
+│   ├── script.py.mako
+│   ├── env.py
+│   └── versions/
+│
 ├── tests/
 ├── .env
 └── requirements.txt
@@ -154,17 +193,18 @@ backend/
 ---
 # API Endpoints
 
-GET    /courses
-POST   /courses
-GET    /courses/{id}
-DELETE /courses/{id}
+```
+GET    /courses                             # List Courses
+POST   /courses                             # Create New Course
+GET    /courses/{course_id}                 # Get Course
+POST   /courses/{course_id}                 # Update Existing Course
+DELETE /courses/{course_id}                 # Delete Existing Course
 
-POST   /courses/{id}/documents
-GET    /courses/{id}/documents
-DELETE /documents/{id}
+POST   /documents/{course_id}               # Upload Document
+GET    /documents                           # Get All Documents
+POST   /documents/{document_id}             # Get Document
+DELETE /documents/{document_id}             # Delete Document
 
-POST   /courses/{id}/process
-
-GET    /courses/{id}/artifacts
-GET    /artifacts/{id}
-PUT    /artifacts/{id}
+GET    /jobs/{job_id}                       # Get Job
+POST   /jobs/documents/{document_id}        # Process Document Job
+```

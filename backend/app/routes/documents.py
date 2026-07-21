@@ -1,12 +1,18 @@
-import os
-import shutil
 from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import File
 from fastapi import UploadFile
+
 from sqlalchemy.orm import Session
+
 from app.database import get_db
-from app.services.document_service import save_document
+from app.schemas.document import DocumentResponse
+from app.services.document_service import (
+    save_document,
+    get_documents,
+    get_document_by_id,
+    delete_document
+)
 
 
 router = APIRouter(
@@ -14,38 +20,34 @@ router = APIRouter(
     tags=["Documents"]
 )
 
-UPLOAD_DIR = "uploads"
 
-@router.post("/{course_id}")
+@router.post("/{course_id}", response_model=DocumentResponse)
 def upload_document(
     course_id: int,
     file: UploadFile = File(...),
     db: Session = Depends(get_db)
 ):
+    return save_document(db, course_id,file)
 
-    os.makedirs(
-        UPLOAD_DIR,
-        exist_ok=True
-    )
 
-    filepath = os.path.join(
-        UPLOAD_DIR,
-        file.filename
-    )
+@router.get("/", response_model=list[DocumentResponse])
+def get_all_documents(
+    db: Session = Depends(get_db)
+):
+    return get_documents(db)
 
-    with open(filepath, "wb") as buffer:
 
-        shutil.copyfileobj(
-            file.file,
-            buffer
-        )
+@router.get("/{document_id}", response_model=DocumentResponse)
+def get_document(
+    document_id: int,
+    db: Session = Depends(get_db)
+):
+    return get_document_by_id(db, document_id)
 
-    document = save_document(
-        db=db,
-        course_id=course_id,
-        filename=file.filename,
-        filepath=filepath,
-        file_type=file.content_type
-    )
 
-    return document
+@router.delete("/{document_id}")
+def delete_document(
+    document_id: int,
+    db: Session = Depends(get_db)
+):
+    return delete_document(db, document_id)

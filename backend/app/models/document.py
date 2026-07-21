@@ -1,10 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Column
-from sqlalchemy import DateTime
-from sqlalchemy import Integer
-from sqlalchemy import String
-from sqlalchemy import ForeignKey
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
 
 from sqlalchemy.orm import relationship
 
@@ -47,6 +43,11 @@ class Document(Base):
         default="uploaded"
     )
 
+    extracted_text = Column(
+        Text,
+        nullable=True
+    )
+
     created_at = Column(
         DateTime,
         default=datetime.utcnow
@@ -56,4 +57,10 @@ class Document(Base):
     course = relationship(
         "Course",
         back_populates="documents"
+    )
+
+    jobs = relationship(
+        "Job",
+        back_populates="document",
+        cascade="all, delete"
     )
