@@ -38,7 +38,7 @@ Inputs -> Processing Pipeline -> Course Knowledge Base -> Search or AI Generatio
 - Uploads
 - Migrations
 
-## Phase 2 — Content Management
+## Phase 2 — Content Management (Complete)
 
 - More document endpoints
 - More course endpoints
@@ -94,14 +94,13 @@ Database:
 - SQLite/PostgreSQL
 
 AI:
-- OpenAI API or local model
+- Ollama + Qwen 2.5 7B
+- Faster Whisper
+- PaddleOCR
 
 Frontend:
 - JavaScript
 - React
-
-Other:
-- Whisper
 
 ---
 
@@ -149,14 +148,17 @@ backend/
 ├── ai/
 │   ├── providers/
 │   │   ├── base.py
-│   │   ├── openai_provider.py
-│   │   └── local_provider.py
+│   │   └── ollama_provider.py
 │   │
 │   ├── ingestion/
+│   │   ├── router.py
 │   │   ├── pdf.py
 │   │   ├── ppt.py
+│   │   ├── docx.py
+│   │   ├── text.py
 │   │   ├── audio.py
-│   │   └── notes.py
+│   │   ├── video.py
+│   │   └── ocr.py
 │   │
 │   ├── processing/
 │   │   ├── chunking.py

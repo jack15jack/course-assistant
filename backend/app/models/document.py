@@ -43,11 +43,6 @@ class Document(Base):
         default="uploaded"
     )
 
-    extracted_text = Column(
-        Text,
-        nullable=True
-    )
-
     created_at = Column(
         DateTime,
         default=datetime.utcnow
@@ -61,6 +56,12 @@ class Document(Base):
 
     jobs = relationship(
         "Job",
+        back_populates="document",
+        cascade="all, delete"
+    )
+
+    contents = relationship(
+        "DocumentContent",
         back_populates="document",
         cascade="all, delete"
     )

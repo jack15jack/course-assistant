@@ -46,7 +46,7 @@ def get_document(
 
 
 @router.delete("/{document_id}")
-def delete_document(
+def delete_document_endpoint(
     document_id: int,
     db: Session = Depends(get_db)
 ):

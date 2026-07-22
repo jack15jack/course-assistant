@@ -14,11 +14,7 @@ def save_document(
     file: UploadFile
 ):
     
-    course = (
-        db.query(Course)
-        .filter(Course.id == course_id)
-        .first()
-    )
+    course = (db.query(Course).filter(Course.id == course_id).first())
 
     if not course:
         raise HTTPException(

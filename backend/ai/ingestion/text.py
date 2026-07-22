@@ -1,9 +1,14 @@
 def extract_text(filepath):
 
-    with open(
-        filepath,
-        "r",
-        encoding="utf-8"
-    ) as file:
+    with open(filepath, "r", encoding="utf-8") as file:
+        text = file.read()
 
-        return file.read()
+    return [
+        {
+            "content": text,
+            "content_type": "text",
+            "metadata": {
+                "location": filepath
+            }
+        }
+    ]

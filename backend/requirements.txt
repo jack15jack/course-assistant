@@ -15,3 +15,7 @@ pydantic
 pypdf
 python-pptx
 python-docx
+paddleocr
+paddlepaddle
+faster-whisper
+ffmpeg-python

@@ -1,16 +1,21 @@
 from docx import Document
 
+
 def extract_docx_text(filepath):
 
     doc = Document(filepath)
 
-    text = ""
+    text = "\n".join(
+        paragraph.text
+        for paragraph in doc.paragraphs
+    )
 
-    for paragraph in doc.paragraphs:
-
-        if paragraph.text.strip():
-
-            text += paragraph.text
-            text += "\n"
-
-    return text
+    return [
+        {
+            "content": text,
+            "content_type": "text",
+            "metadata": {
+                "location": filepath
+            }
+        }
+    ]

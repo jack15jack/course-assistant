@@ -3,17 +3,32 @@ from pptx import Presentation
 
 def extract_ppt_text(filepath):
 
-    presentation = Presentation(filepath)
+    prs = Presentation(filepath)
 
-    text = ""
+    slides = []
 
-    for slide_number, slide in enumerate(presentation.slides):
+    for index, slide in enumerate(prs.slides):
 
-        text += (f"\n\n--- Slide {slide_number+1} ---\n")
+        text = []
 
         for shape in slide.shapes:
-            if hasattr(shape, "text"):
-                text += shape.text
-                text += "\n"
 
-    return text
+            if hasattr(shape, "text"):
+                text.append(shape.text)
+
+        slide_text = "\n".join(text)
+
+        if slide_text.strip():
+
+            slides.append(
+                {
+                    "content": slide_text,
+                    "content_type": "text",
+                    "metadata": {
+                        "slide": index + 1,
+                        "location": filepath
+                    }
+                }
+            )
+
+    return slides

@@ -5,18 +5,24 @@ def extract_pdf_text(filepath):
 
     reader = PdfReader(filepath)
 
-    text = ""
+    pages = []
 
-    for page_number, page in enumerate(reader.pages):
 
-        page_text = page.extract_text()
+    for index, page in enumerate(reader.pages):
 
-        if page_text:
-            text += (
-                f"\n\n--- Page {page_number+1} ---\n"
+        text = page.extract_text()
+
+        if text.strip():
+
+            pages.append(
+                {
+                    "content": text,
+                    "content_type": "text",
+                    "metadata": {
+                        "page": index + 1,
+                        "location": filepath
+                    }
+                }
             )
 
-            text += page_text
-
-
-    return text
+    return pages
