@@ -1,12 +1,19 @@
-from faster_whisper import WhisperModel
+from functools import lru_cache
 
-model = WhisperModel(
-    "base",
-    device="auto",
-    compute_type="int8"
-)
+@lru_cache(maxsize=1)
+def get_whisper_model():
+
+    from faster_whisper import WhisperModel
+
+    return WhisperModel(
+        "base",
+        device="auto",
+        compute_type="int8"
+    )
 
 def extract_audio_text(filepath):
+
+    model = get_whisper_model()
 
     segments, info = model.transcribe(
         filepath,
@@ -22,7 +29,7 @@ def extract_audio_text(filepath):
 
                 "content":segment.text,
 
-                "content_metadata":
+                "metadata":
                 {
                     "start":segment.start,
                     "end":segment.end,

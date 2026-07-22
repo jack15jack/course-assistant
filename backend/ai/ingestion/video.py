@@ -22,6 +22,6 @@ def extract_video_text(filepath):
     transcript = extract_audio_text(temp_audio.name)
 
     for item in transcript:
-        item["content_metadata"]["source"] = ("ffmpeg + faster-whisper")
+        item["metadata"]["source"] = ("ffmpeg + faster-whisper")
 
     return transcript

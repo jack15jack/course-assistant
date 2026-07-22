@@ -33,7 +33,7 @@ def process_document(
     document_id: int
 ):
     
-    job = (db.query(Job).filter(document_id, "document_processing").order_by(Job.id.desc()).first())
+    job = (db.query(Job).filter(Job.document_id == document_id,Job.job_type == "document_processing").order_by(Job.id.desc()).first())
 
     if not job:
         raise Exception("Processing job not found")
@@ -53,7 +53,7 @@ def process_document(
             raise Exception("Document not found")
         
         #extraction
-        contents = extract_document(document.filepath)
+        contents = extract_document(document.filepath, document.file_type)
 
         job.progress = 50
         job.updated_at = datetime.utcnow()

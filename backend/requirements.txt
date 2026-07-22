@@ -1,12 +1,12 @@
 # API
 fastapi
 uvicorn
+python-multipart
 
 # Database
 sqlalchemy
 psycopg2-binary
 alembic
-
 
 python-dotenv
 pydantic
@@ -15,7 +15,6 @@ pydantic
 pypdf
 python-pptx
 python-docx
-paddleocr
-paddlepaddle
+easyocr
 faster-whisper
 ffmpeg-python

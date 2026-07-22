@@ -1,33 +1,41 @@
-from paddleocr import PaddleOCR
+import easyocr
 
-ocr = PaddleOCR(
-    lang="en",
-    use_doc_orientation_classify=False,
-    use_doc_unwarping=False,
-    use_textline_orientation=False
-)
+_reader = None
+
+def get_ocr():
+    global _reader
+
+    if _reader is None:
+        _reader = easyocr.Reader(
+            ['en'],
+            gpu=False
+        )
+
+    return _reader
+
 
 def extract_image_text(filepath):
 
-    results = []
+    ocr = get_ocr()
 
-    output = ocr.predict(filepath)
+    results = ocr.readtext(filepath)
 
-    for page in output:
+    contents = []
 
-        for text, score in zip(
-            page["rec_texts"],
-            page["rec_scores"]
-        ):
-            results.append(
+    for bbox, text, confidence in results:
+
+        contents.append(
+            {
+                "content_type": "ocr",
+
+                "content": text,
+
+                "metadata":
                 {
-                    "content_type": "ocr",
-                    "content": text,
-                    "content_metadata": {
-                        "confidence": float(score),
-                        "source": "paddleocr"
-                    }
+                    "confidence": float(confidence),
+                    "source": "easyocr"
                 }
-            )
+            }
+        )
 
-    return results
+    return contents
