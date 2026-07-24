@@ -5,7 +5,7 @@ from datetime import datetime
 from app.models.job import Job
 from app.models.document import Document
 from app.services.content_service import add_document_content
-from app.services.section_service import create_section
+from app.services.section_service import add_section
 from ai.ingestion.router import extract_document
 from ai.processing.normalize import normalize_text
 from ai.processing.sectioning import detect_sections
@@ -60,16 +60,11 @@ def process_document(
         contents = extract_document(document.filepath, document.file_type)
 
         for item in contents:
+
             normalized = normalize_text(item["content"])
+
             item["content"] = normalized
-            item["sections"] = detect_sections(normalized)
 
-        job.progress = 50
-        job.updated_at = datetime.utcnow()
-
-        db.commit()
-
-        for item in contents:
             add_document_content(
                 db=db,
                 document_id=document.id,
@@ -78,15 +73,16 @@ def process_document(
                 metadata=item["metadata"]
             )
 
-        for item in contents:
-            for section in item["sections"]:
-                create_section(
+            sections = detect_sections(normalized)
+
+            for section in sections:
+                add_section(
                     db=db,
                     document_id=document.id,
-                    title=section["title"],
-                    level=section["level"],
-                    content=section["content"]
+                    section_data=section
                 )
+            
+        db.commit()
 
         # complete
         job.status = "completed"

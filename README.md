@@ -75,13 +75,11 @@ Inputs -> Processing Pipeline -> Course Knowledge Base -> Search or AI Generatio
 - Concept maps
 - Timeline generation
 
-## Phase 6 — Intelligent Features
+## Phase 6 — Usability Features
 
-- Cross-document linking
-- "Explain this concept"
-- Exam difficulty estimation
-- Weak-topic detection
-- Personalized study plans
+- Regeneration Endpoint 
+- Cross document linking
+- Study plans
 - Automatic review schedules
 
 ---
@@ -142,6 +140,8 @@ backend/
 │   │   ├── course_service.py
 │   │   ├── document_service.py
 │   │   ├── artifact_service.py
+│   │   ├── section_service.py
+│   │   ├── content_service.py
 │   │   └── processing_service.py
 │   │
 │   └── utils/
@@ -209,4 +209,6 @@ DELETE /documents/{document_id}             # Delete Document
 
 GET    /jobs/{job_id}                       # Get Job
 POST   /jobs/documents/{document_id}        # Process Document Job
+
+GET    /zzz/reprocess                       # Regenerate knowledge base
 ```
