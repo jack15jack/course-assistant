@@ -65,3 +65,9 @@ class Document(Base):
         back_populates="document",
         cascade="all, delete"
     )
+
+    sections = relationship(
+        "Section",
+        back_populates="document",
+        cascade="all, delete-orphan"
+    )

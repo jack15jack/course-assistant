@@ -17,7 +17,7 @@ def extract_pdf_text(filepath):
             pages.append(
                 {
                     "content": text,
-                    "content_type": "text",
+                    "content_type": "pdf",
                     "metadata": {
                         "page": index + 1,
                         "location": filepath

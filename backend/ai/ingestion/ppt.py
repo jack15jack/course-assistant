@@ -23,7 +23,7 @@ def extract_ppt_text(filepath):
             slides.append(
                 {
                     "content": slide_text,
-                    "content_type": "text",
+                    "content_type": "ppt",
                     "metadata": {
                         "slide": index + 1,
                         "location": filepath

@@ -4,8 +4,12 @@ from datetime import datetime
 
 from app.models.job import Job
 from app.models.document import Document
-from ai.ingestion.router import extract_document
 from app.services.content_service import add_document_content
+from app.services.section_service import create_section
+from ai.ingestion.router import extract_document
+from ai.processing.normalize import normalize_text
+from ai.processing.sectioning import detect_sections
+
 
 
 def create_processing_job(
@@ -55,6 +59,11 @@ def process_document(
         #extraction
         contents = extract_document(document.filepath, document.file_type)
 
+        for item in contents:
+            normalized = normalize_text(item["content"])
+            item["content"] = normalized
+            item["sections"] = detect_sections(normalized)
+
         job.progress = 50
         job.updated_at = datetime.utcnow()
 
@@ -68,6 +77,16 @@ def process_document(
                 content_type=item["content_type"],
                 metadata=item["metadata"]
             )
+
+        for item in contents:
+            for section in item["sections"]:
+                create_section(
+                    db=db,
+                    document_id=document.id,
+                    title=section["title"],
+                    level=section["level"],
+                    content=section["content"]
+                )
 
         # complete
         job.status = "completed"

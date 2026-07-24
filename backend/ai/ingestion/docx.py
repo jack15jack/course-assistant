@@ -13,7 +13,7 @@ def extract_docx_text(filepath):
     return [
         {
             "content": text,
-            "content_type": "text",
+            "content_type": "docx",
             "metadata": {
                 "location": filepath
             }

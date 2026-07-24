@@ -47,7 +47,7 @@ Inputs -> Processing Pipeline -> Course Knowledge Base -> Search or AI Generatio
 - Processing jobs
 - Jobs endpoints
 
-## Phase 3 — Ingestion
+## Phase 3 — Ingestion (Complete)
 
 - PDF extraction
 - PowerPoint extraction
@@ -59,10 +59,11 @@ Inputs -> Processing Pipeline -> Course Knowledge Base -> Search or AI Generatio
 
 ## Phase 4 — Knowledge Base
 
-- Sections
+- Normalize Content
+- Detect Sections
 - Chunking
 - Embeddings
-- Search
+- Vector Store
 
 ## Phase 5 — AI Generation
 
@@ -97,6 +98,7 @@ AI:
 - Ollama + Qwen 2.5 7B
 - Faster Whisper
 - PaddleOCR
+- FAISS
 
 Frontend:
 - JavaScript
@@ -162,9 +164,10 @@ backend/
 │   │
 │   ├── processing/
 │   │   ├── chunking.py
-│   │   ├── organization.py
-│   │   ├── summarization.py
-│   │   └── formulas.py
+│   │   ├── sectioning.py
+│   │   ├── normalize.py
+│   │   ├── structure.py
+│   │   └── embeddings.py
 │   │
 │   ├── generators/
 │   │   ├── notes.py
@@ -173,12 +176,9 @@ backend/
 │   │   ├── exams.py
 │   │   └── study_guides.py
 │   │
-│   └── pipeline/
-│       ├── __init__.py
-│       ├── document_pipeline.py
-│       ├── artifact_pipeline.py
-│       ├── metadata_pipeline.py
-│       └── pipeline_manager.py
+│   └── embeddings/
+│       ├── provider.py
+│       └── sentence_transformers.py
 │
 ├── uploads/
 ├── generated/
