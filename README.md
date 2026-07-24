@@ -66,17 +66,14 @@ Inputs -> Processing Pipeline -> Course Knowledge Base -> Search or AI Generatio
 
 ## Phase 5 — AI Generation
 
-- Notes
-- Study guides
-- Formula sheets
-- Practice exams
-- Flashcards
-- Concept maps
-- Timeline generation
+- Artifact generation (notes, study guides, formula sheets, exams)
+- LLM Implementation
+- markdown to PDF
+- Artifact endpoints
 
 ## Phase 6 — Usability Features
 
-- Regeneration Endpoint 
+- Reprocessing Endpoint 
 - Cross document linking
 - Study plans
 - Automatic review schedules
@@ -89,13 +86,15 @@ Backend:
 - FastAPI
 
 Database:
-- SQLite/PostgreSQL
+- PostgreSQL
+- SQLAlchemy
+- Pydantic
 
 AI:
 - Ollama + Qwen 2.5 7B
 - Faster Whisper
-- PaddleOCR
-- FAISS
+- EasyOCR
+- Sentence-Transformer
 
 Frontend:
 - JavaScript
@@ -109,19 +108,21 @@ backend/
 │
 ├── app/
 │   ├── __init__.py
-│   ├── main.py                 # FastAPI entry point
-│   ├── config.py               # Environment/configuration
-│   ├── database.py             # SQLAlchemy engine/session
+│   ├── main.py                     # FastAPI entry point
+│   ├── config.py                   # Environment/configuration
+│   ├── database.py                 # SQLAlchemy engine/session
 │   │
-│   ├── models/                 # SQLAlchemy models
+│   ├── models/                     # SQLAlchemy models
 │   │   ├── __init__.py         
 │   │   ├── course.py           
 │   │   ├── document.py         
+│   │   ├── job.py
+│   │   ├── document_content.py
 │   │   ├── section.py
-│   │   ├── artifact.py
-│   │   └── job.py
+│   │   ├── chunk.py
+│   │   └── artifact.py
 │   │
-│   ├── schemas/                # Pydantic models
+│   ├── schemas/                    # Pydantic models
 │   │   ├── __init__.py
 │   │   ├── course.py
 │   │   ├── document.py
@@ -132,16 +133,17 @@ backend/
 │   │   ├── __init__.py
 │   │   ├── courses.py
 │   │   ├── documents.py
-│   │   ├── artifacts.py
-│   │   └── jobs.py
+│   │   ├── jobs.py
+│   │   └── artifacts.py
 │   │
-│   ├── services/               # Business logic
+│   ├── services/                   # Business logic
 │   │   ├── course_service.py
 │   │   ├── document_service.py
-│   │   ├── artifact_service.py
-│   │   ├── section_service.py
+│   │   ├── processing_service.py
 │   │   ├── content_service.py
-│   │   └── processing_service.py
+│   │   ├── section_service.py
+│   │   ├── chunk_service.py
+│   │   └── artifact_service.py
 │   │
 │   └── utils/
 │       └── file_utils.py
@@ -150,6 +152,9 @@ backend/
 │   ├── providers/
 │   │   ├── base.py
 │   │   └── ollama_provider.py
+│   │
+│   ├── context/
+│   │   └── builder.py
 │   │
 │   ├── ingestion/
 │   │   ├── router.py
@@ -162,22 +167,18 @@ backend/
 │   │   └── ocr.py
 │   │
 │   ├── processing/
-│   │   ├── chunking.py
-│   │   ├── sectioning.py
 │   │   ├── normalize.py
-│   │   ├── structure.py
+│   │   ├── sectioning.py
+│   │   ├── chunking.py
 │   │   └── embeddings.py
 │   │
-│   ├── generators/
-│   │   ├── notes.py
-│   │   ├── flashcards.py
-│   │   ├── quizzes.py
-│   │   ├── exams.py
-│   │   └── study_guides.py
-│   │
-│   └── embeddings/
-│       ├── provider.py
-│       └── sentence_transformers.py
+│   └── artifact_generators/
+│       ├── notes.py
+│       ├── flashcards.py
+│       ├── quizzes.py
+│       ├── exams.py
+│       └── study_guides.py
+│
 │
 ├── uploads/
 ├── generated/
