@@ -3,8 +3,6 @@ from pathlib import Path
 
 from app.models.artifact import Artifact
 
-from app.services.artifact_service import create_artifact
-
 from ai.artifact_generators.notes import NotesGenerator
 from ai.artifact_generators.study_guides import StudyGuideGenerator
 from ai.artifact_generators.formulas import FormulaGenerator
@@ -55,7 +53,7 @@ def generate_artifact(
 
     # Instantiate generator
     generator_class = GENERATORS[artifact_type]
-    generator = generator_class()
+    generator = generator_class(db=db)
 
     markdown = generator.generate(document_id)
 

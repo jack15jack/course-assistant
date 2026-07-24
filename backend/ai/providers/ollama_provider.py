@@ -21,7 +21,11 @@ class OllamaProvider(LLMProvider):
             json={
                 "model": self.model,
                 "prompt": prompt,
-                "stream": False
+                "stream": False,
+                "options": {
+                    "num_ctx": 8192,
+                    "temperature": 0.2
+                }
             }
         )
 

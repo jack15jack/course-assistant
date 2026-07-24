@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from app.routes.courses import router as courses_router
 from app.routes.documents import router as documents_router
 from app.routes.jobs import router as jobs_router
+from app.routes.artifacts import router as artifacts_router
 
 
 app = FastAPI(
@@ -14,6 +15,7 @@ app = FastAPI(
 app.include_router(courses_router)
 app.include_router(documents_router)
 app.include_router(jobs_router)
+app.include_router(artifacts_router)
 
 
 @app.get("/")

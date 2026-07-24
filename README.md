@@ -91,7 +91,7 @@ Database:
 - Pydantic
 
 AI:
-- Ollama + Qwen 2.5 7B
+- Ollama + Llama 3.1
 - Faster Whisper
 - EasyOCR
 - Sentence-Transformer
@@ -196,19 +196,21 @@ backend/
 # API Endpoints
 
 ```
-GET    /courses                             # List Courses
-POST   /courses                             # Create New Course
-GET    /courses/{course_id}                 # Get Course
-POST   /courses/{course_id}                 # Update Existing Course
-DELETE /courses/{course_id}                 # Delete Existing Course
+GET    /courses                                             # List Courses
+POST   /courses                                             # Create New Course
+GET    /courses/{course_id}                                 # Get Course
+POST   /courses/{course_id}                                 # Update Existing Course
+DELETE /courses/{course_id}                                 # Delete Existing Course
 
-POST   /documents/{course_id}               # Upload Document
-GET    /documents                           # Get All Documents
-POST   /documents/{document_id}             # Get Document
-DELETE /documents/{document_id}             # Delete Document
+POST   /documents/{course_id}                               # Upload Document
+GET    /documents                                           # Get All Documents
+POST   /documents/{document_id}                             # Get Document
+DELETE /documents/{document_id}                             # Delete Document
 
-GET    /jobs/{job_id}                       # Get Job
-POST   /jobs/documents/{document_id}        # Process Document Job
+GET    /jobs/{job_id}                                       # Get Job
+POST   /jobs/documents/{document_id}                        # Process Document Job
 
-GET    /zzz/reprocess                       # Regenerate knowledge base
+POST   /artifacts/documents/{document_id}/{artifact_type}   # Create Document Artifact
+
+GET    /zzz/reprocess                                       # Regenerate knowledge base
 ```

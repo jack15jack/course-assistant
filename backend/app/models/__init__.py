@@ -4,6 +4,7 @@ from .document_content import DocumentContent
 from .job import Job
 from .section import Section
 from .chunk import Chunk
+from .artifact import Artifact
 
 __all__ = [
     "Course",
@@ -12,4 +13,5 @@ __all__ = [
     "Job",
     "Section",
     "Chunk",
+    "Artifact",
 ]

@@ -143,7 +143,7 @@ class ContextBuilder:
             {
                 "id": chunk.id,
                 "content": chunk.content,
-                "metadata": chunk.chunk_metadata,
+                "metadata": chunk.metadata,
             }
             for chunk in chunks
         ]
@@ -314,7 +314,7 @@ class ContextBuilder:
         sections = (
             self.db.query(Section)
             .filter(Section.document_id == document_id)
-            .order_by(Section.order_index)
+            .order_by(Section.position)
             .all()
         )
 
@@ -326,7 +326,7 @@ class ContextBuilder:
                 "id": section.id,
                 "title": section.title,
                 "level": section.level,
-                "order_index": section.order_index,
+                "position": section.position,
                 "chunks": self._load_chunks(section.id)
             })
 
@@ -345,7 +345,7 @@ class ContextBuilder:
             {
                 "id": chunk.id,
                 "content": chunk.content,
-                "metadata": chunk.chunk_metadata,
+                "metadata": chunk.metadata,
             }
             for chunk in chunks
         ]
