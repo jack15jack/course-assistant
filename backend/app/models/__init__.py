@@ -3,6 +3,7 @@ from .document import Document
 from .document_content import DocumentContent
 from .job import Job
 from .section import Section
+from .chunk import Chunk
 
 __all__ = [
     "Course",
@@ -10,4 +11,5 @@ __all__ = [
     "DocumentContent",
     "Job",
     "Section",
+    "Chunk",
 ]

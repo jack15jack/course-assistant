@@ -57,13 +57,12 @@ Inputs -> Processing Pipeline -> Course Knowledge Base -> Search or AI Generatio
 - Audio (speech-to-text)
 - Video (audio extraction → speech-to-text)
 
-## Phase 4 — Knowledge Base
+## Phase 4 — Knowledge Base (Complete)
 
 - Normalize Content
 - Detect Sections
 - Chunking
 - Embeddings
-- Vector Store
 
 ## Phase 5 — AI Generation
 

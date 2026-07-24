@@ -18,3 +18,6 @@ python-docx
 easyocr
 faster-whisper
 ffmpeg-python
+
+# embeddings
+sentence-transformers

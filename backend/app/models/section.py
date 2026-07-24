@@ -62,3 +62,8 @@ class Section(Base):
         "Document",
         back_populates="sections"
     )
+
+    chunks = relationship(
+        "Chunk",
+        back_populates="section"
+    )

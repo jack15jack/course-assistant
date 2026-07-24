@@ -7,7 +7,7 @@ def get_whisper_model():
 
     return WhisperModel(
         "base",
-        device="auto",
+        device="cpu",
         compute_type="int8"
     )
 
@@ -20,23 +20,29 @@ def extract_audio_text(filepath):
         beam_size=5
     )
 
-    results = []
+    text = []
+
+    metadata = {
+        "source": "faster-whisper",
+        "language": info.language,
+        "segments": []
+    }
 
     for segment in segments:
-        results.append(
+
+        text.append(segment.text)
+
+        metadata["segments"].append(
             {
-                "content_type":"transcript",
-
-                "content":segment.text,
-
-                "metadata":
-                {
-                    "start":segment.start,
-                    "end":segment.end,
-                    "language":info.language,
-                    "source":"faster-whisper"
-                }
+                "start": segment.start,
+                "end": segment.end
             }
         )
 
-    return results
+    return [
+        {
+            "content_type": "transcript",
+            "content": " ".join(text),
+            "metadata": metadata
+        }
+    ]

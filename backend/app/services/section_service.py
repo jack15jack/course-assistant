@@ -19,5 +19,6 @@ def add_section(
     )
 
     db.add(section)
+    db.flush()
 
     return section

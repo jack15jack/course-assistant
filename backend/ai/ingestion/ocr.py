@@ -18,24 +18,31 @@ def extract_image_text(filepath):
 
     ocr = get_ocr()
 
-    results = ocr.readtext(filepath)
+    output = ocr.readtext(filepath)
 
-    contents = []
+    text_parts = []
 
-    for bbox, text, confidence in results:
+    metadata = {
+        "source": "easyocr",
+        "regions": []
+    }
 
-        contents.append(
+    for bbox, text, confidence in output:
+
+        text_parts.append(text)
+
+        metadata["regions"].append(
             {
-                "content_type": "ocr",
-
-                "content": text,
-
-                "metadata":
-                {
-                    "confidence": float(confidence),
-                    "source": "easyocr"
-                }
+                "text": text,
+                "confidence": confidence,
+                "bbox": bbox
             }
         )
 
-    return contents
+    return [
+        {
+            "content_type": "ocr",
+            "content": "\n".join(text_parts),
+            "metadata": metadata
+        }
+    ]

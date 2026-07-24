@@ -9,6 +9,9 @@ from app.services.section_service import add_section
 from ai.ingestion.router import extract_document
 from ai.processing.normalize import normalize_text
 from ai.processing.sectioning import detect_sections
+from ai.processing.chunking import chunk_text
+from app.services.chunk_service import add_chunk
+from ai.processing.embeddings import generate_embedding
 
 
 
@@ -61,10 +64,12 @@ def process_document(
 
         for item in contents:
 
+            # Normalize text
             normalized = normalize_text(item["content"])
 
             item["content"] = normalized
 
+            # Add the text to the document content model
             add_document_content(
                 db=db,
                 document_id=document.id,
@@ -73,14 +78,31 @@ def process_document(
                 metadata=item["metadata"]
             )
 
+            # separate the text into sections
             sections = detect_sections(normalized)
 
             for section in sections:
-                add_section(
+                db_section = add_section(
                     db=db,
                     document_id=document.id,
                     section_data=section
                 )
+
+                chunks = chunk_text(section["content"])
+
+                for chunk in chunks:
+
+                    embedding = generate_embedding(chunk["content"])
+
+                    add_chunk(
+                        db=db,
+                        document_id=document.id,
+                        section_id=db_section.id,
+                        content=chunk["content"],
+                        chunk_index=chunk["chunk_index"],
+                        metadata=chunk["metadata"],
+                        embedding=embedding
+                    )
             
         db.commit()
 
