@@ -4,7 +4,7 @@ from ai.context.builder import ContextBuilder
 from ai.providers.ollama_provider import OllamaProvider
 
 
-class BaseGenerator:
+class ArtifactGenerator:
 
     def __init__(self, db: Session):
 
@@ -14,6 +14,6 @@ class BaseGenerator:
 
         self.llm = OllamaProvider()
 
-    def generate(self, document_id: int):
+    def generate(self, document_id: int)-> str:
 
         raise NotImplementedError

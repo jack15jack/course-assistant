@@ -77,3 +77,8 @@ class Document(Base):
         back_populates="document",
         cascade="all, delete"
     )
+
+    artifacts = relationship(
+        "Artifact",
+        back_populates="document"
+    )

@@ -1,11 +1,11 @@
-from ai.artifact_generators.base import BaseGenerator
+from ai.artifact_generators.base import ArtifactGenerator
 
 from ai.prompts.formulas import build_formula_prompt
 
 
-class NotesGenerator(BaseGenerator):
+class FormulaGenerator(ArtifactGenerator):
 
-    def generate(self, document_id):
+    def generate(self, document_id)-> str:
 
         context = self.context_builder.build_formula_context(document_id)
 

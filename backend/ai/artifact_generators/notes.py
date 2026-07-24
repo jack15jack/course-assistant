@@ -1,11 +1,11 @@
-from ai.artifact_generators.base import BaseGenerator
+from ai.artifact_generators.base import ArtifactGenerator
 
 from ai.prompts.notes import build_notes_prompt
 
 
-class NotesGenerator(BaseGenerator):
+class NotesGenerator(ArtifactGenerator):
 
-    def generate(self, document_id):
+    def generate(self, document_id)-> str:
 
         context = self.context_builder.build_full_context(
             document_id

@@ -1,10 +1,10 @@
-from ai.artifact_generators.base import BaseGenerator
+from ai.artifact_generators.base import ArtifactGenerator
 
 from ai.prompts.study_guides import build_studyguide_prompt
 
-class NotesGenerator(BaseGenerator):
+class StudyGuideGenerator(ArtifactGenerator):
 
-    def generate(self, document_id):
+    def generate(self, document_id)-> str:
 
         context = self.context_builder.build_concise_context(document_id)
 
