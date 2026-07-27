@@ -7,7 +7,6 @@ python-multipart
 sqlalchemy
 psycopg2-binary
 alembic
-
 python-dotenv
 pydantic
 
@@ -19,5 +18,8 @@ easyocr
 faster-whisper
 ffmpeg-python
 
-# embeddings
+# Embeddings
 sentence-transformers
+
+# Markdown to PDF
+reportlab

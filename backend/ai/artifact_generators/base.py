@@ -14,6 +14,6 @@ class ArtifactGenerator:
 
         self.llm = OllamaProvider()
 
-    def generate(self, document_id: int)-> str:
+    def generate(self, scope: str, scope_id: int)-> str:
 
         raise NotImplementedError

@@ -10,39 +10,16 @@ class Artifact(Base):
     __tablename__ = "artifacts"
 
 
-    id = Column(
-        Integer,
-        primary_key=True,
-        index=True
-    )
+    id = Column(Integer, primary_key=True, index=True)
 
-    document_id = Column(
-        Integer,
-        ForeignKey("documents.id"),
-        nullable=False
-    )
+    scope = Column(String, nullable=False)
 
-    artifact_type = Column(
-        String,
-        nullable=False
-    )
-    
-    title = Column(
-        String,
-        nullable=False
-    )
+    scope_id = Column(Integer, nullable=False)  
 
-    filepath = Column(
-        String,
-        nullable=False
-    )
+    artifact_type = Column(String, nullable=False)
 
-    created_at = Column(
-        DateTime,
-        default=datetime.utcnow
-    )
+    title = Column(String, nullable=False)
 
-    document = relationship(
-        "Document",
-        back_populates="artifacts"
-    )
+    filepath = Column(String, nullable=False)
+
+    created_at = Column(DateTime, default=datetime.utcnow)

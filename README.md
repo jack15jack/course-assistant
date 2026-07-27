@@ -28,58 +28,6 @@ The system builds detailed and organized notes/test questions on each topic.
 Inputs -> Processing Pipeline -> Course Knowledge Base -> Search or AI Generation -> Web Application
 
 
-# Roadmap
-
-## Phase 1 — Foundation (Complete)
-
-- Database
-- Courses
-- Documents
-- Uploads
-- Migrations
-
-## Phase 2 — Content Management (Complete)
-
-- More document endpoints
-- More course endpoints
-- Update upload storage
-- Update metadata
-- Processing jobs
-- Jobs endpoints
-
-## Phase 3 — Ingestion (Complete)
-
-- PDF extraction
-- PowerPoint extraction
-- DOCX extraction
-- Plain text
-- Images (OCR)
-- Audio (speech-to-text)
-- Video (audio extraction → speech-to-text)
-
-## Phase 4 — Knowledge Base (Complete)
-
-- Normalize Content
-- Detect Sections
-- Chunking
-- Embeddings
-
-## Phase 5 — AI Generation
-
-- Artifact generation (notes, study guides, formula sheets, exams)
-- LLM Implementation
-- markdown to PDF
-- Artifact endpoints
-
-## Phase 6 — Usability Features
-
-- Reprocessing Endpoint 
-- Cross document linking
-- Study plans
-- Automatic review schedules
-
----
-
 # Tech Stack
 Backend:
 - Python
@@ -210,7 +158,70 @@ DELETE /documents/{document_id}                             # Delete Document
 GET    /jobs/{job_id}                                       # Get Job
 POST   /jobs/documents/{document_id}                        # Process Document Job
 
-POST   /artifacts/documents/{document_id}/{artifact_type}   # Create Document Artifact
+POST   /artifacts/gen/{scope}/{scope_id}/{artifact_type}    # Create Document Artifact
+GET    /artifacts/{artifact_id}                             # Read Artifact
+DELETE /artifacts/{artifact_id}                             # Delete Artifact
+GET    /artifacts/document/{document_id}                    # Read Document Artifacts
+GET    /artifacts/course/{course_id}                        # Read Course Artifacts
+GET    /artifacts/{artifact_id}/download                    # Download Artifact
 
 GET    /zzz/reprocess                                       # Regenerate knowledge base
 ```
+---
+
+# Roadmap
+
+## Phase 1 — Foundation (Complete)
+
+- Database
+- Courses
+- Documents
+- Uploads
+- Migrations
+
+## Phase 2 — Content Management (Complete)
+
+- More document endpoints
+- More course endpoints
+- Update upload storage
+- Update metadata
+- Processing jobs
+- Jobs endpoints
+
+## Phase 3 — Ingestion (Complete)
+
+- PDF extraction
+- PowerPoint extraction
+- DOCX extraction
+- Plain text
+- Images (OCR)
+- Audio (speech-to-text)
+- Video (audio extraction → speech-to-text)
+
+## Phase 4 — Knowledge Base (Complete)
+
+- Normalize Content
+- Detect Sections
+- Chunking
+- Embeddings
+
+## Phase 5 — AI Generation (Complete)
+
+- Artifact generation (notes, study guides, formula sheets, exams)
+- LLM Implementation
+- markdown to PDF
+- Artifact endpoints
+
+## Phase 6 — Usability
+
+- Reprocessing Endpoint
+- Regenerating Endpoint 
+- Course Level Artifacts
+- Frontend UI
+
+---
+
+# TODO:
+- Regenerate knowledge base endpoint
+- Cascade Deletes
+- Build the front end

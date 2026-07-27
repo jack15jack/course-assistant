@@ -16,11 +16,7 @@ class ContextBuilder:
 
     def build_document_context(self, document_id: int) -> dict:
 
-        document = (
-            self.db.query(Document)
-            .filter(Document.id == document_id)
-            .first()
-        )
+        document = (self.db.query(Document).filter(Document.id == document_id).first())
 
         if not document:
             raise Exception("Document not found")
@@ -35,9 +31,7 @@ class ContextBuilder:
         }
 
     def build_document_text(self, document_id: int):
-
         context = self.build_document_context(document_id)
-
         return self._context_to_text(context)
 
 
@@ -45,64 +39,44 @@ class ContextBuilder:
 
     def build_course_context(self, course_id: int):
 
-        course = (
-            self.db.query(Course)
-            .filter(Course.id == course_id)
-            .first()
-        )
+        course = (self.db.query(Course).filter(Course.id == course_id).first())
 
         if not course:
             raise Exception("Course not found")
 
-        documents = (
-            self.db.query(Document)
-            .filter(Document.course_id == course_id)
-            .filter(Document.status == "processed")
-            .order_by(Document.id)
-            .all()
-        )
+        documents = (self.db.query(Document).filter(Document.course_id == course_id).filter(Document.status == "processed").order_by(Document.id).all())
+
+        sections = []
+        for document in documents:
+            sections.extend(self._load_sections(document.id))
+
 
         return {
             "course": {
                 "id": course.id,
                 "name": course.name,
             },
-            "documents": [
-                self.build_document_context(doc.id)
-                for doc in documents
-            ]
+            "sections": sections
         }
 
     def build_course_text(self, course_id):
-
         context = self.build_course_context(course_id)
+        return self._context_to_text(context)
 
-        text = []
 
-        for document in context["documents"]:
-
-            text.append(
-                f"# {document['document']['filename']}"
-            )
-
-            text.append(
-                self._context_to_text(document)
-            )
-
-            text.append("")
-
-        return "\n".join(text)
-
+    def build_scope_text(
+        self,
+        scope: str,
+        scope_id: int
+    ):
+        context = self._get_context(scope, scope_id)
+        return self._context_to_text(context)
     
     # Sections
 
     def build_section_context(self, section_id):
 
-        section = (
-            self.db.query(Section)
-            .filter(Section.id == section_id)
-            .first()
-        )
+        section = (self.db.query(Section).filter(Section.id == section_id).first())
 
         if not section:
             raise Exception("Section not found")
@@ -132,12 +106,7 @@ class ContextBuilder:
 
     def build_chunk_context(self, chunk_ids):
 
-        chunks = (
-            self.db.query(Chunk)
-            .filter(Chunk.id.in_(chunk_ids))
-            .order_by(Chunk.chunk_index)
-            .all()
-        )
+        chunks = (self.db.query(Chunk).filter(Chunk.id.in_(chunk_ids)).order_by(Chunk.chunk_index).all())
 
         return [
             {
@@ -163,11 +132,12 @@ class ContextBuilder:
     # Full document - used in notes
     def build_full_context(
         self,
-        document_id,
+        scope: str,
+        scope_id: int,
         max_characters=25000
     ):
 
-        context = self.build_document_context(document_id)
+        context = self._get_context(scope, scope_id)
 
         text = []
 
@@ -200,11 +170,12 @@ class ContextBuilder:
     # Condensed - used in study guide
     def build_concise_context(
         self,
-        document_id: int,
+        scope: str,
+        scope_id: int,
         max_characters: int = 12000
     ):
 
-        context = self.build_document_context(document_id)
+        context = self._get_context(scope, scope_id)
 
         text = []
         current_size = 0
@@ -232,11 +203,12 @@ class ContextBuilder:
     # Only formula heavy chunks - used in formula sheet
     def build_formula_context(
         self,
-        document_id: int,
+        scope: str,
+        scope_id: int,
         max_characters: int = 10000
     ):
 
-        context = self.build_document_context(document_id)
+        context = self._get_context(scope, scope_id)
 
         formula_keywords = [
             "=", "integral", "derivative", "sum", "sigma",
@@ -278,11 +250,12 @@ class ContextBuilder:
     # Concepts, formulas, and definitions - used in exams
     def build_exam_context(
         self,
-        document_id: int,
+        scope: str,
+        scope_id: int,
         max_characters: int = 16000
     ):
 
-        context = self.build_document_context(document_id)
+        context = self._get_context(scope, scope_id)
 
         text = []
         current_size = 0
@@ -364,3 +337,17 @@ class ContextBuilder:
             text.append("")
 
         return "\n".join(text)
+
+    def _get_context(
+            self,
+            scope: str,
+            scope_id: int
+    ):
+        if scope == "document":
+            return self.build_document_context(scope_id)
+
+        elif scope == "course":
+            return self.build_course_context(scope_id)
+
+        else:
+            raise Exception("Invalid scope")
