@@ -42,6 +42,6 @@ class Course(Base):
     documents = relationship(
     "Document",
     back_populates="course",
-    cascade="all, delete"
+    cascade="all, delete-orphan"
     )
 

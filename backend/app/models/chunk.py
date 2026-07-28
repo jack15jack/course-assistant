@@ -11,13 +11,13 @@ class Chunk(Base):
 
     document_id = Column(
         Integer,
-        ForeignKey("documents.id"),
+        ForeignKey("documents.id", ondelete="CASCADE"),
         nullable=False
     )
 
     section_id = Column(
         Integer,
-        ForeignKey("sections.id"),
+        ForeignKey("sections.id", ondelete="CASCADE"),
         nullable=True
     )
 

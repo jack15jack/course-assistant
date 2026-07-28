@@ -214,14 +214,12 @@ GET    /zzz/reprocess                                       # Regenerate knowled
 
 ## Phase 6 — Usability
 
-- Reprocessing Endpoint
-- Regenerating Endpoint 
+- Cascade Deletes
 - Course Level Artifacts
 - Frontend UI
 
 ---
 
 # TODO:
-- Regenerate knowledge base endpoint
 - Cascade Deletes
 - Build the front end

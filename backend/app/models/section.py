@@ -13,7 +13,7 @@ class Section(Base):
 
     document_id = Column(
         Integer,
-        ForeignKey("documents.id"),
+        ForeignKey("documents.id", ondelete="CASCADE"),
         nullable=False
     )
 
@@ -65,5 +65,6 @@ class Section(Base):
 
     chunks = relationship(
         "Chunk",
-        back_populates="section"
+        back_populates="section",
+        cascade="all, delete-orphan"
     )

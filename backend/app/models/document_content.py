@@ -19,7 +19,7 @@ class DocumentContent(Base):
 
     id = Column(Integer, primary_key=True)
 
-    document_id = Column(Integer, ForeignKey("documents.id"), nullable=False)
+    document_id = Column(Integer, ForeignKey("documents.id", ondelete="CASCADE"), nullable=False)
 
     content_type = Column(String, nullable=False)
 

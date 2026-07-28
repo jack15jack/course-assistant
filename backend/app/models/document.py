@@ -19,7 +19,7 @@ class Document(Base):
 
     course_id = Column(
         Integer,
-        ForeignKey("courses.id"),
+        ForeignKey("courses.id", ondelete="CASCADE"),
         nullable=False
     )
 
@@ -57,13 +57,13 @@ class Document(Base):
     jobs = relationship(
         "Job",
         back_populates="document",
-        cascade="all, delete"
+        cascade="all, delete-orphan"
     )
 
     contents = relationship(
         "DocumentContent",
         back_populates="document",
-        cascade="all, delete"
+        cascade="all, delete-orphan"
     )
 
     sections = relationship(
@@ -75,6 +75,6 @@ class Document(Base):
     chunks = relationship(
         "Chunk",
         back_populates="document",
-        cascade="all, delete"
+        cascade="all, delete-orphan"
     )
 
