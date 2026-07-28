@@ -164,8 +164,6 @@ DELETE /artifacts/{artifact_id}                             # Delete Artifact
 GET    /artifacts/document/{document_id}                    # Read Document Artifacts
 GET    /artifacts/course/{course_id}                        # Read Course Artifacts
 GET    /artifacts/{artifact_id}/download                    # Download Artifact
-
-GET    /zzz/reprocess                                       # Regenerate knowledge base
 ```
 ---
 
@@ -211,15 +209,44 @@ GET    /zzz/reprocess                                       # Regenerate knowled
 - LLM Implementation
 - markdown to PDF
 - Artifact endpoints
-
-## Phase 6 — Usability
-
 - Cascade Deletes
 - Course Level Artifacts
-- Frontend UI
+
+## Phase 6 — Front End
+
+- Dashboard -> goes to individual course pages
+- Course Page (course list, add new/edit courses)
+- Course Detail (upload/process docs, document list, course artifacts, generate artifacts, artifact list)
 
 ---
 
 # TODO:
-- Cascade Deletes
-- Build the front end
+
+## Front Page
+- Update UI
+    - Use cards
+    - Better looking links to course pages
+    - dark mode/better colors
+
+- Add number of documents in each course
+
+- Courses management
+    - Add course
+    - Delete course
+    - Edit course
+
+## Single Course Page
+- Add course info (from get /courses/id)
+
+- Better artifact generation selection 
+    - choose scope
+    - choose document if document is chosen
+    - choose type
+
+- Update UI
+    - better buttons (use pictures when it makes sense)
+    - loading circle
+    - dark mode/better colors
+    - drop down for documents/artifacts
+
+- Link back to courses

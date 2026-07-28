@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from app.schemas.document import DocumentResponse
 
 
 class CourseCreate(BaseModel):
@@ -14,6 +15,7 @@ class CourseResponse(BaseModel):
     name: str
     semester: str
     description: str | None
+    documents: list[DocumentResponse] = []
 
     class Config:
         from_attributes = True
