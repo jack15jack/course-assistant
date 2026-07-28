@@ -1,192 +1,90 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+import LoadingSpinner from "../components/LoadingSpinner";
+import UploadDocument from "../components/UploadDocument";
+import DocumentList from "../components/DocumentList";
+import DocumentCard from "../components/DocumentCard";
+import ArtifactGenerator from "../components/ArtifactGenerator";
+import ArtifactList from "../components/ArtifactList"
+import CourseHeader from "../components/CourseHeader"
 import { getCourse } from "../api/courses";
-import { deleteArtifact, getCourseArtifacts } from "../api/artifacts";
-import { uploadDocument, processDocument, deleteDocument } from "../api/documents";
+import { deleteArtifact, getCourseArtifacts} from "../api/artifacts"
+import { uploadDocument, processDocument, deleteDocument } from "../api/documents"
 
-import api from "../api/client";
-import Card from "../components/Card";
-import Section from "../components/Section";
-
-function CoursePage() {
+function CoursePage(){
 
     const { id } = useParams();
-
     const [course, setCourse] = useState(null);
     const [artifacts, setArtifacts] = useState([]);
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [fileInputKey, setFileInputKey] = useState(0);
-    const [uploading, setUploading] = useState(false);
-    
 
-    useEffect(() => {
-        loadCourse();
-        loadArtifacts();
-    }, []);
+    useEffect(()=>{
+        load();
+    },[]);
 
-    async function loadCourse() {
-        const res = await getCourse(id);
-        setCourse(res.data);
+    async function load(){
+        const courseRes = await getCourse(id);
+        const artifactRes = await getCourseArtifacts(id);
+        setCourse(courseRes.data);
+        setArtifacts(artifactRes.data);
     }
 
-    async function loadArtifacts() {
-        const res = await getCourseArtifacts(id);
-        setArtifacts(res.data);
-    }
-
-    async function handleUpload() {
-        if (!selectedFile) return;
-
-        setUploading(true);
-
-        try {
-            await uploadDocument(id, selectedFile);
-            loadCourse();
-        } finally {
-            setUploading(false);
-            setSelectedFile(null);
-        }
+    async function handleUpload(file) {
+        await uploadDocument(id, file);
+        await load();
     }
 
     async function handleProcess(documentId) {
         await processDocument(documentId);
-        setTimeout(loadCourse, 1500);
-    }
-
-    async function generateCourseArtifact(id, type) {
-        await generateCourseArtifact(id, type);
-        setTimeout(loadArtifacts, 1500);
-    }
-
-    async function generateDocumentArtifact(id, type) {
-        await generateDocumentArtifact(id, type);
-        setTimeout(loadArtifacts, 1500);
+        load();
     }
 
     async function handleDeleteDocument(documentId) {
         await deleteDocument(documentId);
-        setTimeout(loadCourse, 1500);
+        load();
     }
 
     async function handleDeleteArtifact(artifactId) {
         await deleteArtifact(artifactId);
-        setTimeout(loadArtifacts, 1500);
+        load();
     }
 
-    if (!course) {
-        return <div>Loading...</div>;
-    }
+    if(!course)
+    return <LoadingSpinner/>;
 
     return (
-        <div
-        style={{
-            minHeight:"100vh",
-            background:"#f5f7fb",
-            padding:"40px"
-        }}
-        >
 
-            <h1>{course.name}</h1>
+    <div className="page">
 
-            <hr />
+        <CourseHeader
+        course={course}
+        />
 
-            <h2>Upload Document</h2>
+        <UploadDocument
+        onUpload={handleUpload}
+        />
 
-            <input
-                key={fileInputKey}
-                type="file"
-                onChange={(e) => setSelectedFile(e.target.files[0])}
-            />
+        <DocumentList
+        documents={course.documents}
+        onProcess={handleProcess}
+        onDelete={handleDeleteDocument}
+        refresh={load}
+        />
 
-            <button
-                disabled={uploading || !selectedFile}
-                onClick={handleUpload}
-            >
-                {uploading ? "Uploading..." : "Upload"}
-            </button>
+        <ArtifactGenerator
+        courseId={course.id}
+        documents={course.documents}
+        refresh={load}
+        />
 
-            <hr />
+        <ArtifactList
+        artifacts={artifacts}
+        onDelete={handleDeleteArtifact}
+        refresh={load}
+        />
 
-            <Section title="Documents">
-            {
-            course.documents?.map(document => (
-
-            <Card key={document.id}>
-
-            <h3>
-                {document.filename}
-            </h3>
-
-            <p>
-                Status: {document.status}
-            </p>
-
-            <button onClick={() => handleProcess(document.id)}>
-                Process
-            </button>
-
-            <button onClick={() => handleDeleteDocument(document.id)}>
-                Delete
-            </button>
-
-            </Card>
-            ))
-            }
-            </Section>
-
-            <hr />
-
-            <Section title="Generated Materials">
-
-            <button onClick={() => generateCourseArtifact(course.id, "notes")}>
-                Notes
-            </button>
-
-            <button onClick={() => generateCourseArtifact(course.id, "studyguide")}>
-                Study Guide
-            </button>
-
-            <button onClick={() => generateCourseArtifact(course.id, "formula")}>
-                Formula Sheet
-            </button>
-
-            <button onClick={() => generateCourseArtifact(course.id, "exam")}>
-                Practice Exam
-            </button>
-
-            {
-            artifacts.map(artifact => (
-
-            <Card key={artifact.id}>
-
-            <h3>
-            {artifact.title}
-            </h3>
-
-            <p>
-            {artifact.scope} • {artifact.artifact_type}
-            </p>
-
-            <button 
-            href={`http://localhost:8000/artifacts/${artifact.id}/download`}
-            target="_blank"
-            rel="noreferrer"
-            >
-                Download
-            </button>
-
-            <button onClick={() => handleDeleteArtifact(artifact.id)}>
-                Delete
-            </button>
-
-            </Card>
-            ))
-            }
-            </Section>
-
-        </div>
-    );
+    </div>
+    )
 }
 
 export default CoursePage;

@@ -6,8 +6,7 @@ export const getCourseArtifacts = (courseId) =>
 export const deleteArtifact = (artifactId) =>
     api.delete(`/artifacts/${artifactId}`);
 
-export const generateCourseArtifact = (courseId, type) =>
-    api.post(`/artifacts/gen/course/${courseId}/${type}`);
+export const generateArtifact = (scope, scopeId, type) =>
+    api.post(`/artifacts/gen/${scope}/${scopeId}/${type}`);
 
-export const generateDocumentArtifact = (documentId, type) =>
-    api.post(`/artifacts/gen/document/${documentId}/${type}`);
+export default api;

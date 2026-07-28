@@ -12,7 +12,7 @@ export const uploadDocument = (courseId, file) => {
 };
 
 export const deleteDocument = (documentId) =>
-    api.delete(`/document/${documentId}`);
+    api.delete(`/documents/${documentId}`);
 
 export const processDocument = (documentId) =>
     api.post(`/jobs/documents/${documentId}`);
